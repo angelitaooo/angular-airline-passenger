@@ -8,14 +8,19 @@ import { Component, Input } from '@angular/core';
     styleUrls: ['passenger-form.component.scss'],
     template: `
         <form #form="ngForm" novalidate>
-         {{detail | json}}
+         
             <div>
                Passenger Name:
                <input
                 type="text"
                 name="fullname"
+                required
+                #fullname="ngModel"
                 [ngModel]="detail?.fullname"
                /> 
+               <div *ngIf="fullname.errors?.required && fullname.dirty" class="error">
+               Passenger name is required
+               </div>
             </div>  
 
             <div>
@@ -23,8 +28,13 @@ import { Component, Input } from '@angular/core';
                <input
                 type="number"
                 name="id"
+                required
+                #id="ngModel"
                 [ngModel]="detail?.id"
                /> 
+               <div *ngIf="id.errors?.required && id.dirty" class="error">
+               Passenger ID is required
+               </div>
             </div>  
             <div>
                 <label>
@@ -54,19 +64,11 @@ import { Component, Input } from '@angular/core';
                         [selected]="item.key === detail?.baggage">
                         {{item.value}}
                     </option>
-                </select>
-                <select
-                    name="baggage"
-                    [ngModel]="detail?.baggage">
-                    <option
-                        *ngFor="let item of baggage"
-                        [ngValue]="item.key">
-                        {{item.value}}
-                    </option>
-                </select>
+                </select>              
             </div>
-
-            {{form.value | json }}          
+            <button type="submit" [disabled]="form.invalid">
+                Update passenger
+            </button>
         </form>
     `
 })
